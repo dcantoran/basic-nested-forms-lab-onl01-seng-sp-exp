@@ -14,19 +14,14 @@ class RecipesController < ApplicationController
   end
 
   def create
-    @recipe = Recipe.new(recipe_params)
-    ingredients_params[:ingredients_attributes].values.each do |param|
-      @recipe.ingredients << Ingredient.new(param) unless @recipe.ingredients.include?(Ingredient.new(param))
-    end
-    @recipe.save
-    redirect_to @recipe
+    Recipe.create(recipe_params)
+    redirect_to recipes_path
   end
 
   def recipe_params
-    params.require(:recipe).permit(:title)
-  end
-
-  def ingredients_params
-    params.require(:recipe).permit(:ingredients_attributes=>[:name, :quantity])
+    params.require(:recipe).permit(
+      :title,
+      ingredients_attributes: [ :name, :quantity ]
+    )
   end
 end
